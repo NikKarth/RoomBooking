@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rooms</title>
+</head>
+<body>
+<h1>Available Rooms</h1>
+<ul>
+    <li th:each="room : ${rooms}">
+        <span th:text="${room.name}">Room Name</span> -
+        <span th:text="${room.location}">Location</span> -
+        <span th:text="${room.size}">Size</span>
+        <span th:if="${!room.booked}">
+            <form th:action="@{/book}" method="post">
+                <input type="hidden" name="roomId" th:value="${room.id}" />
+                <button type="submit">Book</button>
+            </form>
+        </span>
+        <span th:if="${room.booked}">(Booked)</span>
+    </li>
+</ul>
+<a href="/dashboard">Dashboard</a>
+</body>
+</html>
