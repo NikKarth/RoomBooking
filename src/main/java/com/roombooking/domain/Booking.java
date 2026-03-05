@@ -21,4 +21,14 @@ public class Booking {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+
+    public Booking() {
+    }
+
+    public Booking(Room room, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.room = room;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
