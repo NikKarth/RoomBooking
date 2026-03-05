@@ -22,7 +22,7 @@ public class RoombookingApplication {
                 r1.setName("Room A");
                 r1.setBuilding("Building 1");
                 r1.setRoomNumber("101");
-                r1.setCapacity(2);
+                r1.setCapacity(200);
                 r1.setWhiteboard(true);
                 repository.save(r1);
 
@@ -30,7 +30,7 @@ public class RoombookingApplication {
                 r2.setName("Room B");
                 r2.setBuilding("Building 1");
                 r2.setRoomNumber("102");
-                r2.setCapacity(4);
+                r2.setCapacity(140);
                 r2.setWhiteboard(false);
                 repository.save(r2);
 
@@ -38,7 +38,7 @@ public class RoombookingApplication {
                 r3.setName("Room C");
                 r3.setBuilding("Building 2");
                 r3.setRoomNumber("201");
-                r3.setCapacity(3);
+                r3.setCapacity(35);
                 r3.setWhiteboard(true);
                 repository.save(r3);
 
@@ -46,7 +46,7 @@ public class RoombookingApplication {
                 r4.setName("Room D");
                 r4.setBuilding("Building 2");
                 r4.setRoomNumber("202");
-                r4.setCapacity(5);
+                r4.setCapacity(150);
                 r4.setWhiteboard(false);
                 repository.save(r4);
 
@@ -54,7 +54,7 @@ public class RoombookingApplication {
                 r5.setName("Room E");
                 r5.setBuilding("Building 3");
                 r5.setRoomNumber("301");
-                r5.setCapacity(1);
+                r5.setCapacity(100);
                 r5.setWhiteboard(true);
                 repository.save(r5);
             }

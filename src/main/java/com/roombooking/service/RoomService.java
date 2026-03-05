@@ -18,9 +18,9 @@ public class RoomService {
 
     public RoomService() {
         // Sample rooms
-        rooms.add(new Room(1L, "Conference Room A", "Building 1", "101", 10, true));
-        rooms.add(new Room(2L, "Conference Room B", "Building 1", "102", 8, false));
-        rooms.add(new Room(3L, "Meeting Room C", "Building 2", "201", 12, true));
+        rooms.add(new Room(1L, "Conference Room A", "Building 1", "101", 100, true));
+        rooms.add(new Room(2L, "Conference Room B", "Building 1", "102", 80, false));
+        rooms.add(new Room(3L, "Meeting Room C", "Building 2", "201", 120, true));
     }
 
     public List<Room> getAllRooms() {
