@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rooms</title>
+    <title>All Rooms</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
-<h1>Available Rooms</h1>
-<ul>
-    <li th:each="room : ${rooms}">
-        <span th:text="${room.name}">Room Name</span> -
-        <span th:text="${room.location}">Location</span> -
-        <span th:text="${room.size}">Size</span>
-        <span th:if="${!room.booked}">
-            <form th:action="@{/book}" method="post">
-                <input type="hidden" name="roomId" th:value="${room.id}" />
-                <button type="submit">Book</button>
-            </form>
-        </span>
-        <span th:if="${room.booked}">(Booked)</span>
-    </li>
-</ul>
+
+<h1>All Rooms</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Building</th>
+        <th>Room Number</th>
+        <th>Capacity</th>
+        <th>Whiteboard</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="room : ${rooms}">
+        <td th:text="${room.name}"></td>
+        <td th:text="${room.building}"></td>
+        <td th:text="${room.roomNumber}"></td>
+        <td th:text="${room.capacity}"></td>
+        <td th:text="${room.whiteboard ? 'Yes' : 'No'}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/rooms/search">Search Available Rooms</a>
 <a href="/dashboard">Dashboard</a>
+
 </body>
 </html>

@@ -1,21 +1,50 @@
 package com.roombooking.controller;
 
+import com.roombooking.domain.Booking;
+import com.roombooking.domain.Room;
 import com.roombooking.service.BookingService;
+import com.roombooking.service.RoomService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Controller
+@RequestMapping("/bookings")
 public class BookingController {
-    private final BookingService service;
 
-    public BookingController(BookingService service) {
-        this.service = service;
-    }
+    @Autowired
+    private BookingService bookingService;
 
-    @PostMapping("/book")
-    public String bookRoom(@RequestParam Long roomId) {
-        service.bookRoom(roomId);
-        return "redirect:/dashboard";
+    @Autowired
+    private RoomService roomService;
+
+    @PostMapping("/room/{roomId}")
+    public String bookRoom(
+            @PathVariable Long roomId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime,
+            Model model) {
+
+        Room room = roomService.getRoomById(roomId);
+        if (room == null) {
+            model.addAttribute("error", "Room not found");
+            return "rooms";
+        }
+
+        Booking booking = new Booking();
+        booking.setRoom(room);
+        booking.setDate(date);
+        booking.setStartTime(startTime);
+        booking.setEndTime(endTime);
+
+        bookingService.saveBooking(booking);
+        model.addAttribute("message", "Room booked successfully!");
+        return "dashboard";
     }
 }

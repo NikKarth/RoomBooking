@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Available Rooms</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        label { display: inline-block; width: 100px; margin-top: 5px; }
+        input, button { margin-bottom: 10px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+<h1>Search Available Rooms</h1>
+
+<form th:action="@{/rooms/search/results}" method="get">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required th:value="${date}">
+
+    <label for="startTime">Start Time:</label>
+    <input type="time" id="startTime" name="startTime" required th:value="${startTime}">
+
+    <label for="endTime">End Time:</label>
+    <input type="time" id="endTime" name="endTime" required th:value="${endTime}">
+
+    <label for="capacity">Capacity:</label>
+    <input type="number" id="capacity" name="capacity" min="1" required th:value="${capacity}">
+
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${rooms != null}">
+    <h2>Available Rooms</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Building</th>
+            <th>Room Number</th>
+            <th>Capacity</th>
+            <th>Whiteboard</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${rooms}">
+            <td th:text="${room.name}"></td>
+            <td th:text="${room.building}"></td>
+            <td th:text="${room.roomNumber}"></td>
+            <td th:text="${room.capacity}"></td>
+            <td th:text="${room.whiteboard ? 'Yes' : 'No'}"></td>
+            <td>
+                <form th:action="@{/rooms/book/{roomId}(roomId=${room.id})}" method="post">
+                    <input type="hidden" name="date" th:value="${date}">
+                    <input type="hidden" name="startTime" th:value="${startTime}">
+                    <input type="hidden" name="endTime" th:value="${endTime}">
+                    <button type="submit">Book</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${message != null}">
+    <p th:text="${message}" style="color: green;"></p>
+</div>
+
+<a href="/">Back to All Rooms</a>
+
+</body>
+</html>
