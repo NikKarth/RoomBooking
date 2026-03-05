@@ -18,7 +18,6 @@ public class Room {
     private int capacity;
     private boolean whiteboard;
 
-    // No-arg constructor required by JPA
     public Room() {}
 
     // Parameterized constructor

@@ -59,6 +59,6 @@ public class RoomController {
     public String roomDetails(@PathVariable Long roomId, Model model) {
         Room room = roomService.getRoomById(roomId);
         model.addAttribute("room", room);
-        return "room-details"; // you can create room-details.html if needed
+        return "room-details";
     }
 }

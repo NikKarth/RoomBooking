@@ -34,12 +34,6 @@ public class RoomService {
                 .orElse(null);
     }
 
-    /**
-     * Find rooms available at the given date and time.
-     * Already booked rooms are excluded.
-     * Capacity is ignored.
-     */
-
     public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
     return rooms.stream()
             .filter(room -> bookings.stream()
