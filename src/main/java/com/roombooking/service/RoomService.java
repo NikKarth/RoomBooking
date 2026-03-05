@@ -36,19 +36,27 @@ public class RoomService {
 
     /**
      * Find rooms available at the given date and time.
-     * Ignores capacity.
+     * Already booked rooms are excluded.
+     * Capacity is ignored.
      */
+
     public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
-        return rooms.stream()
-                .filter(room -> bookings.stream()
-                        .filter(b -> b.getRoom().getId().equals(room.getId()))
-                        .noneMatch(b -> b.getDate().equals(date) &&
-                                !b.getEndTime().isBefore(startTime) &&
-                                !b.getStartTime().isAfter(endTime)))
-                .collect(Collectors.toList());
+    return rooms.stream()
+            .filter(room -> bookings.stream()
+                    .filter(b -> b.getRoom().getId().equals(room.getId()))
+                    .noneMatch(b -> b.getDate().equals(date) &&
+                            b.getStartTime().isBefore(endTime) &&  // booking starts before requested end
+                            b.getEndTime().isAfter(startTime)     // booking ends after requested start
+                    )
+            )
+            .collect(Collectors.toList());
     }
 
     public void addBooking(Booking booking) {
         bookings.add(booking);
+    }
+
+    public List<Booking> getAllBookings() {
+        return bookings;
     }
 }

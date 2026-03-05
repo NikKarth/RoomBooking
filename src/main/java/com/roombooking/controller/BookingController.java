@@ -43,6 +43,7 @@ public class BookingController {
         booking.setEndTime(endTime);
 
         bookingService.saveBooking(booking);
+        roomService.addBooking(booking);
 
         return "redirect:/dashboard";
     }
