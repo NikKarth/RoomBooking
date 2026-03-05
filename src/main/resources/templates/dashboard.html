@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1>Dashboard</h1>
+<h1>Your Booked Rooms</h1>
 
 <table>
     <thead>
@@ -18,22 +18,26 @@
         <th>Name</th>
         <th>Building</th>
         <th>Room Number</th>
-        <th>Capacity</th>
-        <th>Whiteboard</th>
+        <th>Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
     </tr>
     </thead>
+
     <tbody>
-    <tr th:each="room : ${rooms}">
-        <td th:text="${room.name}"></td>
-        <td th:text="${room.building}"></td>
-        <td th:text="${room.roomNumber}"></td>
-        <td th:text="${room.capacity}"></td>
-        <td th:text="${room.whiteboard ? 'Yes' : 'No'}"></td>
+    <tr th:each="booking : ${bookings}">
+        <td th:text="${booking.room.name}"></td>
+        <td th:text="${booking.room.building}"></td>
+        <td th:text="${booking.room.roomNumber}"></td>
+        <td th:text="${booking.date}"></td>
+        <td th:text="${booking.startTime}"></td>
+        <td th:text="${booking.endTime}"></td>
     </tr>
     </tbody>
 </table>
 
 <a href="/">Back to All Rooms</a>
+<br>
 <a href="/rooms/search">Search Available Rooms</a>
 
 </body>

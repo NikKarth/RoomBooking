@@ -4,10 +4,10 @@ import com.roombooking.domain.Booking;
 import com.roombooking.domain.Room;
 import com.roombooking.service.BookingService;
 import com.roombooking.service.RoomService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -23,18 +23,17 @@ public class BookingController {
     @Autowired
     private RoomService roomService;
 
-    @PostMapping("/room/{roomId}")
+    @GetMapping("/room/{roomId}")
     public String bookRoom(
             @PathVariable Long roomId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime,
-            Model model) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime) {
 
         Room room = roomService.getRoomById(roomId);
+
         if (room == null) {
-            model.addAttribute("error", "Room not found");
-            return "rooms";
+            return "redirect:/rooms";
         }
 
         Booking booking = new Booking();
@@ -44,7 +43,7 @@ public class BookingController {
         booking.setEndTime(endTime);
 
         bookingService.saveBooking(booking);
-        model.addAttribute("message", "Room booked successfully!");
-        return "dashboard";
+
+        return "redirect:/dashboard";
     }
 }

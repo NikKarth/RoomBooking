@@ -10,6 +10,13 @@
         table { border-collapse: collapse; width: 100%; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
+        a.book-btn {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -17,6 +24,7 @@
 <h1>Search Available Rooms</h1>
 
 <form th:action="@{/rooms/search/results}" method="get">
+
     <label for="date">Date:</label>
     <input type="date" id="date" name="date" required th:value="${date}">
 
@@ -26,13 +34,13 @@
     <label for="endTime">End Time:</label>
     <input type="time" id="endTime" name="endTime" required th:value="${endTime}">
 
-    <!-- Capacity removed from search input but still displayed in table -->
-
     <button type="submit">Search</button>
+
 </form>
 
 <div th:if="${rooms != null}">
     <h2>Available Rooms</h2>
+
     <table>
         <thead>
         <tr>
@@ -44,24 +52,31 @@
             <th>Action</th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="room : ${rooms}">
+
             <td th:text="${room.name}"></td>
             <td th:text="${room.building}"></td>
             <td th:text="${room.roomNumber}"></td>
             <td th:text="${room.capacity}"></td>
             <td th:text="${room.whiteboard ? 'Yes' : 'No'}"></td>
+
             <td>
-                <form th:action="@{/rooms/book/{roomId}(roomId=${room.id})}" method="post">
-                    <input type="hidden" name="date" th:value="${date}">
-                    <input type="hidden" name="startTime" th:value="${startTime}">
-                    <input type="hidden" name="endTime" th:value="${endTime}">
-                    <button type="submit">Book</button>
-                </form>
+                <a class="book-btn"
+                   th:href="@{/bookings/room/{roomId}(
+                        roomId=${room.id},
+                        date=${date},
+                        startTime=${startTime},
+                        endTime=${endTime})}">
+                    Book
+                </a>
             </td>
+
         </tr>
         </tbody>
     </table>
+
 </div>
 
 <div th:if="${message != null}">

@@ -10,18 +10,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-            .csrf().disable()
+            .csrf(csrf -> csrf.disable())
+
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/book", "/dashboard").authenticated()  // Login required
-                .anyRequest().permitAll()                                 // Everything else public
+                .requestMatchers("/bookings/**", "/dashboard").authenticated()
+                .anyRequest().permitAll()
             )
-            .formLogin()
-                .loginPage("/login")        // your custom login page
-                .defaultSuccessUrl("/dashboard", true) // redirect to dashboard after login
-            .and()
-            .logout()
-                .logoutSuccessUrl("/");    // redirect to public home after logout
+
+            .formLogin(form -> form
+                .defaultSuccessUrl("/dashboard")
+                .permitAll()
+            )
+
+            .logout(logout -> logout
+                .logoutSuccessUrl("/")
+                .permitAll()
+            );
 
         return http.build();
     }
