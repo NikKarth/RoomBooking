@@ -26,7 +26,7 @@
     </thead>
 
     <tbody>
-    <tr th:each="booking, iterStat : ${bookings}">
+    <tr th:each="booking : ${bookings}">
         <td th:text="${booking.room.name}"></td>
         <td th:text="${booking.room.building}"></td>
         <td th:text="${booking.room.roomNumber}"></td>
@@ -35,7 +35,7 @@
         <td th:text="${booking.endTime}"></td>
         <td>
             <form th:action="@{/bookings/delete}" method="post" style="display:inline">
-                <input type="hidden" name="index" th:value="${iterStat.index}" />
+                <input type="hidden" name="id" th:value="${booking.id}" />
                 <button type="submit" onclick="return confirm('Delete this booking?')">Delete</button>
             </form>
         </td>

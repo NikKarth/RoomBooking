@@ -1,31 +1,29 @@
 package com.roombooking.service;
 
 import com.roombooking.domain.Booking;
+import com.roombooking.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BookingService {
 
-    private final List<Booking> bookings = new ArrayList<>();
+    private final BookingRepository bookingRepository;
 
-    public void saveBooking(Booking booking) {
-        bookings.add(booking);
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
+
+    public Booking saveBooking(Booking booking) {
+        return bookingRepository.save(booking);
     }
 
     public List<Booking> getAllBookings() {
-        return bookings;
+        return bookingRepository.findAll();
     }
 
-    public void deleteBooking(int index) {
-        if (index >= 0 && index < bookings.size()) {
-            bookings.remove(index);
-        }
-    }
-
-    public void deleteBooking(Booking booking) {
-        bookings.remove(booking);
+    public void deleteBooking(Long id) {
+        bookingRepository.deleteById(id);
     }
 }

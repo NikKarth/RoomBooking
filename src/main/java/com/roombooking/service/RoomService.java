@@ -2,96 +2,94 @@ package com.roombooking.service;
 
 import com.roombooking.domain.Booking;
 import com.roombooking.domain.Room;
+import com.roombooking.repository.BookingRepository;
+import com.roombooking.repository.RoomRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
 
-    private final List<Room> rooms = new ArrayList<>();
-    private final List<Booking> bookings = new ArrayList<>();
+    private final RoomRepository roomRepository;
+    private final BookingRepository bookingRepository;
 
-    public RoomService() {
-        // Sample rooms
-        rooms.add(new Room(1L, "Conference Room A", "Building 1", "101", 100, true));
-        rooms.add(new Room(2L, "Conference Room B", "Building 1", "102", 80, false));
-        rooms.add(new Room(3L, "Meeting Room C", "Building 2", "201", 120, true));
+    public RoomService(RoomRepository roomRepository, BookingRepository bookingRepository) {
+        this.roomRepository = roomRepository;
+        this.bookingRepository = bookingRepository;
     }
 
-    // Original method (if you need)
     public List<Room> getAllRooms() {
-        return rooms;
+        return roomRepository.findAll();
     }
 
-    // NEW METHOD: sort by any column, ascending or descending
     public List<Room> getAllRooms(String sort, String dir) {
-
-        Comparator<Room> comparator;
-
+        Sort.Order order;
         switch (sort) {
             case "building":
-                comparator = Comparator.comparing(Room::getBuilding);
+                order = Sort.Order.by("building");
                 break;
             case "roomNumber":
-                comparator = Comparator.comparing(Room::getRoomNumber);
+                order = Sort.Order.by("roomNumber");
                 break;
             case "capacity":
-                comparator = Comparator.comparingInt(Room::getCapacity);
+                order = Sort.Order.by("capacity");
                 break;
             case "whiteboard":
-                comparator = Comparator.comparing(Room::isWhiteboard);
+                order = Sort.Order.by("whiteboard");
                 break;
             default:
-                comparator = Comparator.comparing(Room::getName);
+                order = Sort.Order.by("name");
         }
-
         if ("desc".equalsIgnoreCase(dir)) {
-            comparator = comparator.reversed();
+            order = order.with(Sort.Direction.DESC);
+        } else {
+            order = order.with(Sort.Direction.ASC);
         }
-
-        return rooms.stream()
-                .sorted(comparator)
-                .collect(Collectors.toList());
+        return roomRepository.findAll(Sort.by(order));
     }
 
     public Room getRoomById(Long id) {
-        return rooms.stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return roomRepository.findById(id).orElse(null);
     }
 
-        public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
         return findAvailableRooms(date, startTime, endTime, null, null);
-        }
-
-        public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime,
-                         Integer minCapacity, Boolean whiteboardRequired) {
-
-        return rooms.stream()
-            .filter(room -> bookings.stream()
-                .filter(b -> b.getRoom().getId().equals(room.getId()))
-                .noneMatch(b -> b.getDate().equals(date) &&
-                    b.getStartTime().isBefore(endTime) &&
-                    b.getEndTime().isAfter(startTime)
-                )
-            )
-            .filter(room -> minCapacity == null || room.getCapacity() >= minCapacity)
-            .filter(room -> whiteboardRequired == null || !whiteboardRequired || room.isWhiteboard())
-            .collect(Collectors.toList());
-        }
-
-    public void addBooking(Booking booking) {
-        bookings.add(booking);
     }
 
-    public List<Booking> getAllBookings() {
-        return bookings;
+    public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime,
+                                         Integer minCapacity, Boolean whiteboardRequired) {
+
+        List<Room> candidates;
+        if (minCapacity != null) {
+            candidates = roomRepository.findAvailableRooms(date, startTime, endTime, minCapacity);
+        } else {
+            // if no capacity filter, get all rooms and filter by availability
+            candidates = roomRepository.findAll().stream()
+                    .filter(room -> bookingRepository.findAll().stream()
+                            .filter(b -> b.getRoom().getId().equals(room.getId()))
+                            .noneMatch(b -> b.getDate().equals(date) &&
+                                    b.getStartTime().isBefore(endTime) &&
+                                    b.getEndTime().isAfter(startTime)
+                            )
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        if (whiteboardRequired != null && whiteboardRequired) {
+            candidates = candidates.stream()
+                    .filter(Room::isWhiteboard)
+                    .collect(Collectors.toList());
+        }
+
+        return candidates;
+    }
+
+    public Room saveRoom(Room room) {
+        return roomRepository.save(room);
     }
 }

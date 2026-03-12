@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: roombooking
+    runtime: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -cp target/roombooking-0.0.1-SNAPSHOT.jar -Dloader.main=com.roombooking.RoombookingApplication org.springframework.boot.loader.PropertiesLauncher
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8080
+      - key: JAVA_OPTS
+        value: -Xmx512m -Xms256m
+
+  - type: pserv
+    name: roombooking-db
+    runtime: postgres15
+    ipWhitelist: []
+    databaseName: roombooking
+    user: postgres
+    region: oregon

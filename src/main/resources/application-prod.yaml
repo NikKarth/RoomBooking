@@ -1,12 +1,12 @@
 spring:
   datasource:
-    # Support Render's DATABASE_URL or explicit JDBC url
-    url: ${JDBC_DATABASE_URL:${DATABASE_URL:}}
-    username: ${DB_USERNAME:}
-    password: ${DB_PASSWORD:}
+    # For Render: set DATABASE_URL env var (postgres://user:password@host:port/db)
+    # App will auto-convert to JDBC format via spring.datasource.url
+    url: ${JDBC_DATABASE_URL:${DATABASE_URL:jdbc:postgresql://localhost:5432/roombooking}}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
