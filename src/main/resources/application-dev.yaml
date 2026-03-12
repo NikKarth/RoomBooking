@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    # Use a simple file-backed H2 URL (avoid AUTO_SERVER/DB_CLOSE_ON_EXIT options)
+    url: jdbc:h2:file:./data/roombooking
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
