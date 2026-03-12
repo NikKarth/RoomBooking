@@ -47,4 +47,17 @@ public class BookingController {
 
         return "redirect:/dashboard";
     }
+
+    @PostMapping("/delete")
+    public String deleteBooking(@RequestParam int index) {
+        // remove from booking service
+        if (index >= 0 && index < bookingService.getAllBookings().size()) {
+            Booking booking = bookingService.getAllBookings().get(index);
+            bookingService.deleteBooking(index);
+
+            // also remove from room service bookings list if present
+            roomService.getAllBookings().remove(booking);
+        }
+        return "redirect:/dashboard";
+    }
 }

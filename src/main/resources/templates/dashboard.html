@@ -21,17 +21,24 @@
         <th>Date</th>
         <th>Start Time</th>
         <th>End Time</th>
+        <th>Actions</th>
     </tr>
     </thead>
 
     <tbody>
-    <tr th:each="booking : ${bookings}">
+    <tr th:each="booking, iterStat : ${bookings}">
         <td th:text="${booking.room.name}"></td>
         <td th:text="${booking.room.building}"></td>
         <td th:text="${booking.room.roomNumber}"></td>
         <td th:text="${booking.date}"></td>
         <td th:text="${booking.startTime}"></td>
         <td th:text="${booking.endTime}"></td>
+        <td>
+            <form th:action="@{/bookings/delete}" method="post" style="display:inline">
+                <input type="hidden" name="index" th:value="${iterStat.index}" />
+                <button type="submit" onclick="return confirm('Delete this booking?')">Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

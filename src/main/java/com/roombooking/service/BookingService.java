@@ -18,4 +18,14 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookings;
     }
+
+    public void deleteBooking(int index) {
+        if (index >= 0 && index < bookings.size()) {
+            bookings.remove(index);
+        }
+    }
+
+    public void deleteBooking(Booking booking) {
+        bookings.remove(booking);
+    }
 }
