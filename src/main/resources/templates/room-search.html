@@ -34,6 +34,12 @@
     <label for="endTime">End Time:</label>
     <input type="time" id="endTime" name="endTime" required th:value="${endTime}">
 
+    <label for="capacity">Min Capacity:</label>
+    <input type="number" id="capacity" name="capacity" min="1" th:value="${capacity}">
+
+    <label for="whiteboard">Whiteboard:</label>
+    <input type="checkbox" id="whiteboard" name="whiteboard" value="true" th:checked="${whiteboard}">
+
     <button type="submit">Search</button>
 
 </form>

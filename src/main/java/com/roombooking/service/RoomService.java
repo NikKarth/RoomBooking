@@ -67,17 +67,25 @@ public class RoomService {
                 .orElse(null);
     }
 
-    public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        return findAvailableRooms(date, startTime, endTime, null, null);
+        }
+
+        public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime,
+                         Integer minCapacity, Boolean whiteboardRequired) {
+
         return rooms.stream()
-                .filter(room -> bookings.stream()
-                        .filter(b -> b.getRoom().getId().equals(room.getId()))
-                        .noneMatch(b -> b.getDate().equals(date) &&
-                                b.getStartTime().isBefore(endTime) &&
-                                b.getEndTime().isAfter(startTime)
-                        )
+            .filter(room -> bookings.stream()
+                .filter(b -> b.getRoom().getId().equals(room.getId()))
+                .noneMatch(b -> b.getDate().equals(date) &&
+                    b.getStartTime().isBefore(endTime) &&
+                    b.getEndTime().isAfter(startTime)
                 )
-                .collect(Collectors.toList());
-    }
+            )
+            .filter(room -> minCapacity == null || room.getCapacity() >= minCapacity)
+            .filter(room -> whiteboardRequired == null || !whiteboardRequired || room.isWhiteboard())
+            .collect(Collectors.toList());
+        }
 
     public void addBooking(Booking booking) {
         bookings.add(booking);

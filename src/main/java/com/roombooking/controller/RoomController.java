@@ -45,14 +45,18 @@ public class RoomController {
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
             @RequestParam("endTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime,
+            @RequestParam(value = "capacity", required = false) Integer capacity,
+            @RequestParam(value = "whiteboard", required = false) Boolean whiteboard,
             Model model) {
 
-        List<Room> availableRooms = roomService.findAvailableRooms(date, startTime, endTime);
+        List<Room> availableRooms = roomService.findAvailableRooms(date, startTime, endTime, capacity, whiteboard);
 
         model.addAttribute("rooms", availableRooms);
         model.addAttribute("date", date);
         model.addAttribute("startTime", startTime);
         model.addAttribute("endTime", endTime);
+        model.addAttribute("capacity", capacity);
+        model.addAttribute("whiteboard", whiteboard);
 
         if (availableRooms.isEmpty()) {
             model.addAttribute("message", "No rooms available for the selected date and time.");
