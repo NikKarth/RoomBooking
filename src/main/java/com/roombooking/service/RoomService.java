@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,40 @@ public class RoomService {
         rooms.add(new Room(3L, "Meeting Room C", "Building 2", "201", 120, true));
     }
 
+    // Original method (if you need)
     public List<Room> getAllRooms() {
         return rooms;
+    }
+
+    // NEW METHOD: sort by any column, ascending or descending
+    public List<Room> getAllRooms(String sort, String dir) {
+
+        Comparator<Room> comparator;
+
+        switch (sort) {
+            case "building":
+                comparator = Comparator.comparing(Room::getBuilding);
+                break;
+            case "roomNumber":
+                comparator = Comparator.comparing(Room::getRoomNumber);
+                break;
+            case "capacity":
+                comparator = Comparator.comparingInt(Room::getCapacity);
+                break;
+            case "whiteboard":
+                comparator = Comparator.comparing(Room::isWhiteboard);
+                break;
+            default:
+                comparator = Comparator.comparing(Room::getName);
+        }
+
+        if ("desc".equalsIgnoreCase(dir)) {
+            comparator = comparator.reversed();
+        }
+
+        return rooms.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
     }
 
     public Room getRoomById(Long id) {
@@ -35,15 +68,15 @@ public class RoomService {
     }
 
     public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
-    return rooms.stream()
-            .filter(room -> bookings.stream()
-                    .filter(b -> b.getRoom().getId().equals(room.getId()))
-                    .noneMatch(b -> b.getDate().equals(date) &&
-                            b.getStartTime().isBefore(endTime) &&  // booking starts before requested end
-                            b.getEndTime().isAfter(startTime)     // booking ends after requested start
-                    )
-            )
-            .collect(Collectors.toList());
+        return rooms.stream()
+                .filter(room -> bookings.stream()
+                        .filter(b -> b.getRoom().getId().equals(room.getId()))
+                        .noneMatch(b -> b.getDate().equals(date) &&
+                                b.getStartTime().isBefore(endTime) &&
+                                b.getEndTime().isAfter(startTime)
+                        )
+                )
+                .collect(Collectors.toList());
     }
 
     public void addBooking(Booking booking) {

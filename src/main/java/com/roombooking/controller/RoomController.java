@@ -2,13 +2,10 @@ package com.roombooking.controller;
 
 import com.roombooking.domain.Room;
 import com.roombooking.service.RoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,20 +14,29 @@ import java.util.List;
 @Controller
 public class RoomController {
 
-    @Autowired
-    private RoomService roomService;
+    private final RoomService roomService;
 
-    // Display all rooms
+    public RoomController(RoomService roomService) {
+        this.roomService = roomService;
+    }
+
+    // Display all rooms WITH sorting
     @GetMapping("/rooms")
-    public String listRooms(Model model) {
-        model.addAttribute("rooms", roomService.getAllRooms());
+    public String listRooms(
+            @RequestParam(defaultValue = "name") String sort,
+            @RequestParam(defaultValue = "asc") String dir,
+            Model model) {
+
+        List<Room> rooms = roomService.getAllRooms(sort, dir);
+
+        model.addAttribute("rooms", rooms);
         return "rooms"; // renders rooms.html
     }
 
     // Show room search page
     @GetMapping("/rooms/search")
     public String searchRoomPage() {
-        return "room-search"; // renders room-search.html
+        return "room-search";
     }
 
     // Handle search request (date + time only)
@@ -42,6 +48,7 @@ public class RoomController {
             Model model) {
 
         List<Room> availableRooms = roomService.findAvailableRooms(date, startTime, endTime);
+
         model.addAttribute("rooms", availableRooms);
         model.addAttribute("date", date);
         model.addAttribute("startTime", startTime);
@@ -51,7 +58,7 @@ public class RoomController {
             model.addAttribute("message", "No rooms available for the selected date and time.");
         }
 
-        return "room-search"; // reuse same page
+        return "room-search";
     }
 
     // Room details page

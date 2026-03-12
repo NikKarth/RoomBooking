@@ -19,8 +19,25 @@
         }
 
         table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+
+        th, td { 
+            border: 1px solid #ccc; 
+            padding: 8px; 
+            text-align: left; 
+        }
+
         th { background-color: #f2f2f2; }
+
+        th a {
+            margin-left: 5px;
+            color: black;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        th a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -35,13 +52,34 @@
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Building</th>
-        <th>Room Number</th>
-        <th>Capacity</th>
-        <th>Whiteboard</th>
+        <th>
+            Name
+            <a th:href="@{/rooms(sort='name', dir='asc')}">▲</a>
+            <a th:href="@{/rooms(sort='name', dir='desc')}">▼</a>
+        </th>
+        <th>
+            Building
+            <a th:href="@{/rooms(sort='building', dir='asc')}">▲</a>
+            <a th:href="@{/rooms(sort='building', dir='desc')}">▼</a>
+        </th>
+        <th>
+            Room Number
+            <a th:href="@{/rooms(sort='roomNumber', dir='asc')}">▲</a>
+            <a th:href="@{/rooms(sort='roomNumber', dir='desc')}">▼</a>
+        </th>
+        <th>
+            Capacity
+            <a th:href="@{/rooms(sort='capacity', dir='asc')}">▲</a>
+            <a th:href="@{/rooms(sort='capacity', dir='desc')}">▼</a>
+        </th>
+        <th>
+            Whiteboard
+            <a th:href="@{/rooms(sort='whiteboard', dir='asc')}">▲</a>
+            <a th:href="@{/rooms(sort='whiteboard', dir='desc')}">▼</a>
+        </th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="room : ${rooms}">
         <td th:text="${room.name}"></td>
