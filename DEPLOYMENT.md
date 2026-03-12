@@ -35,10 +35,9 @@ The development database file is stored in `./data/roombooking.h2.db` and persis
    - Connect GitHub repo
    - Select branch (e.g., `main`)
    - Build command: `./mvnw clean package -DskipTests`
-   - Start command: `java -cp target/roombooking-0.0.1-SNAPSHOT.jar -Dloader.main=com.roombooking.RoombookingApplication org.springframework.boot.loader.PropertiesLauncher`
+   - Start command: `java -jar target/roombooking-0.0.1-SNAPSHOT.jar`
    - Environment variables:
      - `SPRING_PROFILES_ACTIVE=prod`
-     - `PORT=8080` (auto-set by Render, but ensure it's configured)
      - `JAVA_OPTS=-Xmx512m -Xms256m` (optional, for memory limit)
 
 4. **Create a PostgreSQL Database on Render:**
