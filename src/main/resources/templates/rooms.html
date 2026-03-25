@@ -62,6 +62,7 @@
     <div class="user-info">
         <span th:if="${#authentication != null}">Logged in as: <span th:text="${#authentication.name}"></span>
         <a href="/logout" class="logout-btn">Logout</a></span>
+        <span th:if="${#authentication == null}"><a href="/login">Login</a></span>
     </div>
 </div>
 

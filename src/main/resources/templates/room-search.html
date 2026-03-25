@@ -27,6 +27,9 @@
     <strong>Logged in as:</strong> <span th:text="${#authentication.name}"></span>
     <a href="/logout" class="logout-btn">Logout</a>
 </div>
+<div class="user-info" th:if="${#authentication == null}">
+    <a href="/login">Login</a>
+</div>
 
 <h1>Search Available Rooms</h1>
 
