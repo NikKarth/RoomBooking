@@ -18,17 +18,32 @@ public class Booking {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserAccount user;
+
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
 
+    // empty for db
     public Booking() {
     }
 
-    public Booking(Room room, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    // store by id and time
+    public Booking(Room room, UserAccount user, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.room = room;
+        this.user = user;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public UserAccount getUser() {
+        return user;
+    }
+
+    public void setUser(UserAccount user) {
+        this.user = user;
     }
 }

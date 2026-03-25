@@ -20,7 +20,7 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    // Display all rooms WITH sorting
+    // Display rooms + sorting
     @GetMapping("/rooms")
     public String listRooms(
             @RequestParam(defaultValue = "name") String sort,
@@ -39,7 +39,7 @@ public class RoomController {
         return "room-search";
     }
 
-    // Handle search request (date + time only)
+    // search request
     @GetMapping("/rooms/search/results")
     public String searchResults(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -65,7 +65,6 @@ public class RoomController {
         return "room-search";
     }
 
-    // Room details page
     @GetMapping("/rooms/{roomId}")
     public String roomDetails(@PathVariable Long roomId, Model model) {
         Room room = roomService.getRoomById(roomId);

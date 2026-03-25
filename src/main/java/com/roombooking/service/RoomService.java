@@ -1,6 +1,5 @@
 package com.roombooking.service;
 
-import com.roombooking.domain.Booking;
 import com.roombooking.domain.Room;
 import com.roombooking.repository.BookingRepository;
 import com.roombooking.repository.RoomRepository;
@@ -27,6 +26,7 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
+    // Get all rooms with sorting
     public List<Room> getAllRooms(String sort, String dir) {
         Sort.Order order;
         switch (sort) {
@@ -53,10 +53,15 @@ public class RoomService {
         return roomRepository.findAll(Sort.by(order));
     }
 
+    // Get room by id
     public Room getRoomById(Long id) {
-        return roomRepository.findById(id).orElse(null);
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+        return roomRepository.findById(id).orElseThrow(() -> new RuntimeException("Room not found"));
     }
 
+    
     public List<Room> findAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
         return findAvailableRooms(date, startTime, endTime, null, null);
     }
@@ -88,8 +93,12 @@ public class RoomService {
 
         return candidates;
     }
-
+    //save a room to the db
+    @SuppressWarnings("null")
     public Room saveRoom(Room room) {
+        if (room == null) {
+            throw new IllegalArgumentException("Room cannot be null");
+        }
         return roomRepository.save(room);
     }
 }
